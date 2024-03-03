@@ -10,6 +10,8 @@ import com.api.formulariocontrol.service.FormularioService;
 import java.util.List;
 import java.util.Optional;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/formulario")
+@Api(value="API REST Formulario")
 public class FormController implements IFormControl{
     
     final FormularioService formService;
@@ -41,6 +44,7 @@ public class FormController implements IFormControl{
     
     @Override
     @PostMapping
+    @ApiOperation(value="Salva um formulário")
     public ResponseEntity<Object> saveFormulario(@RequestBody @Valid FormDto formDto){
         Pessoa pessoa = new Pessoa();
         BeanUtils.copyProperties(formDto, pessoa);
@@ -49,12 +53,14 @@ public class FormController implements IFormControl{
     
     @Override
     @GetMapping
+    @ApiOperation(value="Retorna uma lista de formulários")
     public ResponseEntity<List<Pessoa>> getAllFormulario(){
         return ResponseEntity.status(HttpStatus.CREATED).body(formService.findAll());
     }
     
     @Override
     @GetMapping("/{id}")
+    @ApiOperation(value="Retorna um formulário")
     public ResponseEntity<Object> getOneFormulario(@PathVariable(value = "id") Long id){
         Optional<Pessoa> pessoa = formService.findById(id);
         if (!pessoa.isPresent()) {
@@ -65,6 +71,7 @@ public class FormController implements IFormControl{
     
     @Override
     @DeleteMapping("/{id}")
+    @ApiOperation(value="Deleta um formulário")
     public ResponseEntity<Object> deleteFormulario(@PathVariable(value = "id") Long id){
         Optional<Pessoa> pessoaOptional = formService.findById(id);
         if (!pessoaOptional.isPresent()) {
@@ -76,6 +83,7 @@ public class FormController implements IFormControl{
     
     @Override
     @PutMapping("/{id}")
+    @ApiOperation(value="Atualiza um formulário")
     public ResponseEntity<Object> updateFormulario(@PathVariable(value = "id") Long id,
                                                     @RequestBody @Valid FormDto formDto){
         Optional<Pessoa> pessoaOptional = formService.findById(id);
